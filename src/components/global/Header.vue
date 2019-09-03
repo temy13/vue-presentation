@@ -1,14 +1,14 @@
 <template lang="pug">
 div
-  v-app-bar(color='deep-purple accent-4')
+  v-app-bar(v-if="editMode" color='deep-purple accent-4')
     v-app-bar-nav-icon
-    v-toolbar-title Page title
-    .flex-grow-1
-    v-btn(icon='')
+    v-toolbar-title {{title}}
+    //-.flex-grow-1
+    //-v-btn(icon='')
       v-icon mdi-heart
-    v-btn(icon='')
+    //-v-btn(icon='')
       v-icon mdi-magnify
-    v-menu(left='' bottom='')
+    //-v-menu(left='' bottom='')
       template(v-slot:activator='{ on }')
         v-btn(icon='' v-on='on')
           v-icon mdi-dots-vertical
@@ -19,10 +19,16 @@ div
 <script>
 export default {
   name: 'Header',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  props: {
+    title: {
+      type: String,
+      default: 'Presen'
+    },
+    editMode: {
+      type: Boolean,
+      default: true
     }
+
   }
 }
 </script>
@@ -42,5 +48,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.slide-content{
+  overflow-y: scroll;
 }
 </style>

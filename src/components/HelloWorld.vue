@@ -1,31 +1,16 @@
 <template lang="pug">
 .root
-  //-.header
-    v-app-bar(color='deep-purple accent-4')
-      v-app-bar-nav-icon
-      v-toolbar-title Page title
-      .flex-grow-1
-      v-btn(icon='')
-        v-icon mdi-heart
-      v-btn(icon='')
-        v-icon mdi-magnify
-      v-menu(left='' bottom='')
-        template(v-slot:activator='{ on }')
-          v-btn(icon='' v-on='on')
-            v-icon mdi-dots-vertical
-        v-list
-          v-list-item(v-for='n in 5' :key='n' @click='() => {}')
-            v-list-item-title Option {{ n }}
-  .height100
+  .height100(v-if="editMode")
     v-container.height100.grey.lighten-5
-      h1 input
       v-row#input.height100(no-gutters='')
         v-col.height100(:key='0' :cols="3")
           v-card.height100.pa-2(tile='' outlined='')
             v-textarea.height100(rows="30" v-model="markdown")
         v-col#review.height100(:key='1' :cols="9")
           v-card.height100.pa-2(tile='' outlined='')
-            mark-display(:markdown='markdown' :isFull="false" @title='setTitle' supportPreview='' keyboardCtrl='' autoFontSize='' )
+            mark-display(:markdown='markdown' :isFull="false" supportPreview='' keyboardCtrl='' autoFontSize='' )
+  .height100(v-if="!editMode")
+    mark-display(:markdown='markdown' :isFull="true" supportPreview='' keyboardCtrl='' autoFontSize='' )
 </template>
 <script>
 import MarkDisplay from 'vue-mark-display'
@@ -54,6 +39,16 @@ import marked from 'marked'
 // `
 const markdown = `
 
+<!-- color: red; -->
+
+## 前提
+
+既存システムの改修は無理
+
+環境設定で終わる
+
+----
+
 \`\`\`horizontalAxis
 - アカデミック
 - 蒸留
@@ -62,16 +57,21 @@ const markdown = `
 - インタビューからの企画
 - ビジネス
 \`\`\`
-----
-
-# Heoo
 
 `
 
 export default {
   components: { MarkDisplay },
+  props: {
+    editMode: {
+      type: Boolean,
+      default: true
+    }
+  },
   data () {
-    return { markdown }
+    return {
+      markdown: markdown
+    }
   },
   methods: {
     setTitle ({ title }) {
